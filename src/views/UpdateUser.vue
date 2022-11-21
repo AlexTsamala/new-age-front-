@@ -1,21 +1,35 @@
 <template>
     <form @submit.prevent="handleSubmit">
         <div class="container">
-            <h1>Register</h1>
-            <p>Please fill in this information to log in </p>
+            <h1>Update profile</h1>
+            <p>Please fill in this information to update profile </p>
             <hr>
 
-            <label for="email"><b>Email</b></label>
-            <input v-model="email" type="text" placeholder="Enter Email" name="email" id="email" required>
+            <label for="firstName"><b>FirstName</b></label>
+      <input
+        v-model="firstName"
+        type="text"
+        placeholder="Enter First Name"
+        name="firstName"
+        id="firstName"
+        required
+      />
 
-            <label for="psw"><b>Password</b></label>
-            <input v-model="password" type="password" placeholder="Enter Password" name="psw" id="psw" required>
+      <label for="LastName"><b>LastName</b></label>
+      <input
+        v-model="lastName"
+        type="text"
+        placeholder="Enter Last Name "
+        name="LastName"
+        id="lastName"
+        required
+      />
 
-            <button type="submit" class="registerbtn">Sign in</button>
+            <button type="submit" class="registerbtn">Update</button>
         </div>
-        <span v-if="fetchStatus" class="password-status">Incorrect password</span>
+        <span v-if="fetchStatus" class="error-status">Server problem,double check information or try again</span>
         <div class="container signin">
-             <p>Don't have an account? <router-link to="/">Register</router-link>.</p>
+             <p>Want to go back to profile page? <router-link to="/profile">Click here</router-link>.</p>
         </div>
     </form>
 </template>
@@ -23,32 +37,29 @@
 
 <script>
 export default {
-        name:"SignUpForm",
+        name:"UpdateUser",
         data() {
-    return {
-      email: "",
-      password: "",
-      fetchStatus:false
-    };
-  },
+            return {
+            firstName: "",
+            lastName: "",
+            };
+        },
   methods: {
     handleSubmit() {
-        fetch("http://localhost:4001/api/auth/sign-in", {
-        method: "POST",
+        fetch("http://localhost:4001/api/auth/users/:userId"+id, {
+        method: "PUT",
         body: JSON.stringify({
-          email: this.email,
-          password: this.password,
+            firstName: this.firstName,
+            lastName: this.lastName,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       })
         .then((response) => response.json())
-        .then((json) =>
-        json.success ? this.$router.push('profile') : this.fetchStatus=true
-        );
-      this.email = "";
-      this.password = "";
+        .then((json) => console.log(json));
+      this.firstName = "";
+      this.lastName = "";
       
     },
   },
@@ -111,7 +122,7 @@ a {
   background-color: #f1f1f1;
   text-align: center;
 }
-.password-status{
+.error-status{
     display: flex;
     margin-bottom: 20px;
     color: red;
