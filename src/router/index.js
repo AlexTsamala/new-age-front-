@@ -12,8 +12,8 @@ const routes = [
     component: RegisterForm
   },
   {
-    path: '/SignUp',
-    name: 'SignU',
+    path: '/SignIn',
+    name: 'SignIn',
     component:SignUpForm
   }
 ]

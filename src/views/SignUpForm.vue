@@ -1,15 +1,15 @@
 <template>
-    <form action="action_page.php">
+    <form @submit.prevent="handleSubmit">
         <div class="container">
             <h1>Register</h1>
             <p>Please fill in this information to log in </p>
             <hr>
-            
+
             <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            <input v-model="email" type="text" placeholder="Enter Email" name="email" id="email" required>
 
             <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+            <input v-model="password" type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
             <button type="submit" class="registerbtn">Sign in</button>
         </div>
@@ -22,8 +22,39 @@
 
 <script>
 export default {
-        name:"SignUpForm"
-    }
+        name:"SignUpForm",
+        data() {
+    return {
+      email: "",
+      password: "",
+      fetchStatus:""
+    };
+  },
+  methods: {
+    handleSubmit() {
+        fetch("http://localhost:4001/api/auth/sign-in", {
+        method: "POST",
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) =>
+          console.log(json)
+        );
+      this.firstName = "";
+      this.lastName = "";
+      this.birthday = "";
+      this.email = "";
+      this.password = "";
+      
+    },
+  },
+}
 
 </script>
 
