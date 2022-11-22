@@ -42,6 +42,7 @@ export default {
             return {
             firstName: "",
             lastName: "",
+            fetchStatus:false
             };
         },
   methods: {

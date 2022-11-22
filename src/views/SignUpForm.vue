@@ -6,10 +6,10 @@
             <hr>
 
             <label for="email"><b>Email</b></label>
-            <input v-model="email" type="text" placeholder="Enter Email" name="email" id="email" required>
+            <input v-model.trim="email" type="text" placeholder="Enter Email" name="email" id="email" required>
 
             <label for="psw"><b>Password</b></label>
-            <input v-model="password" type="password" placeholder="Enter Password" name="psw" id="psw" required>
+            <input v-model.trim="password" type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
             <button type="submit" class="registerbtn">Sign in</button>
         </div>

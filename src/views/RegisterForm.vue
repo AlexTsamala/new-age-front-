@@ -7,7 +7,7 @@
 
       <label for="firstName"><b>FirstName</b></label>
       <input
-        v-model="firstName"
+        v-model.trim="firstName"
         type="text"
         placeholder="Enter First Name"
         name="firstName"
@@ -17,7 +17,7 @@
 
       <label for="LastName"><b>LastName</b></label>
       <input
-        v-model="lastName"
+        v-model.trim="lastName"
         type="text"
         placeholder="Enter Last Name "
         name="LastName"
@@ -27,7 +27,7 @@
 
       <label for="birthday"><b>Birthday</b></label>
       <input
-        v-model="birthday"
+        v-model.trim="birthday"
         type="date"
         id="birthday"
         name="birthday"
@@ -36,10 +36,10 @@
         max="2018-12-31"
         required
       />
-
+      
       <label for="email"><b>Email</b></label>
       <input
-        v-model="email"
+        v-model.trim="email"
         type="text"
         placeholder="example@newage.io"
         name="email"
@@ -50,7 +50,7 @@
       <label for="psw"><b>Password</b></label>
       <input
         minlength="4"
-        v-model="password"
+        v-model.trim="password"
         type="password"
         placeholder="Enter Password"
         name="psw"
@@ -64,6 +64,7 @@
         Already have an account?
         <router-link to="/SignIn">Sign in</router-link>.
       </p>
+      <span v-if="problemStatus" class="email-problem">Email must be finished with @newage.io</span>
       <button type="submit" class="registerbtn">Register</button>
       <p class="problem">{{this.fetchStatus}}</p>
     </div>
@@ -80,34 +81,40 @@ export default {
       birthday: "",
       email: "",
       password: "",
-      fetchStatus:""
+      fetchStatus:"",
+      emailStatus:false,
+      problemStatus:false
     };
   },
   methods: {
     handleSubmit() {
-         fetch("http://localhost:4001/api/auth/sign-up", {
-        method: "POST",
-        body: JSON.stringify({
-          firstName: this.firstName,
-          lastName: this.lastName,
-          birthday: this.birthday,
-          email: this.email,
-          password: this.password,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) =>
-          json.success ? this.$router.push('SignIn') : this.fetchStatus="Server problem,double check information or try again"
-        );
-      this.firstName = "";
-      this.lastName = "";
-      this.birthday = "";
-      this.email = "";
-      this.password = "";
-      
+        this.emailStatus = this.email.endsWith("@newage.io");
+        this.problemStatus = !this.email.endsWith("@newage.io");
+        if(this.emailStatus){
+          fetch("http://localhost:4001/api/auth/sign-up", {
+          method: "POST",
+          body: JSON.stringify({
+            firstName: this.firstName,
+            lastName: this.lastName,
+            birthday: this.birthday,
+            email: this.email,
+            password: this.password,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) =>
+            json.success ? this.$router.push('SignIn') : this.fetchStatus="Server problem,double check information or try again"
+          );
+        this.firstName = "";
+        this.lastName = "";
+        this.birthday = "";
+        this.email = "";
+        this.password = "";
+        this.emailStatus = false;
+      }
     },
   },
 };
@@ -175,5 +182,8 @@ a {
     display:flex;
     align-items: center;
     justify-content: center;
+}
+.email-problem{
+  color:red
 }
 </style>

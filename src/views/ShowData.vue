@@ -1,17 +1,17 @@
 <template>
     <div class="container">
         <h1>First name</h1>
-        <span>alex</span>
+        <span>Sandro</span>
         <h1>Last name</h1>
         <span>Tsamalashvili</span>
         <h1>Email</h1>
-        <span>hello.@gmail.com</span>
+        <span>s.tsamalashvili1998@gmail.com</span>
         <h1>Birthday</h1>
         <span>1998/02/15</span> 
         <router-link class="update-button" to="/profile/:userId/edit">Update user</router-link>
         <button @click="handleDeleteModal" class="delete-button" type="button">Delete user</button>
         <router-link class="sign-out-button" to="/SignIn">Sign out</router-link>
-        <div class="central-div">
+        <div :class="handleClass" >
             <div class="buttons-div">
                 <button type="button" class="delete-button-2">Do you want to delete?</button>
                 <button @click="handleDeleteModal" type="button" class="quit-button">Quit</button>
@@ -25,12 +25,17 @@ export default{
     name:"ShowData",
     data() {
             return {
-                status: false,
+                active: false,
             };
         },
+    computed:{
+        handleClass(){
+            return this.active ? 'central-div' : "central-div-none"
+        }
+    },
     methods:{
         handleDeleteModal(){
-            this.status = !this.status
+            this.active = !this.active
         }
     }
 }
@@ -105,6 +110,10 @@ span{
     display: flex;
     flex-direction: column;
 }
+
+.central-div-none{
+    display: none;
+}
 .buttons-div{
     width: 300px;
     height: 200px;
@@ -121,6 +130,7 @@ span{
     padding: 10px;
     border-radius: 10px;
     color: white;
+    cursor: pointer;
 }
 .quit-button{
     background-color: green;
@@ -128,5 +138,6 @@ span{
     padding: 10px;
     border-radius: 10px;
     color: white;
+    cursor: pointer;
 }
 </style>
